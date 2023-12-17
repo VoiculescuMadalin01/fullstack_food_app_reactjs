@@ -5,7 +5,7 @@ import {Main, Login} from "./containers";
 
 const App = () => {
     return (
-        <div className="w-screen min-h-screen h-auto flex flex-col items-center justify-center bg-red-400">
+        <div className="w-screen min-h-screen h-auto flex flex-col items-center justify-center">
             <Routes>
                 <Route path="/*" element={<Main />} />
                 <Route path="/login" element={<Login />} />
