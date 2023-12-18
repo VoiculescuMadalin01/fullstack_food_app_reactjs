@@ -31,7 +31,10 @@ admin.initializeApp({
 });
 
 app.get("/", (req, res) => {
-    return res.send("muie ene");
+    return res.send("muie dinu");
 });
+
+const userRoute = require("./routes/user");
+app.use("/api/users", userRoute);
 
 exports.app = onRequest(app);
