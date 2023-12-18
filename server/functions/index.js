@@ -31,7 +31,7 @@ admin.initializeApp({
 });
 
 app.get("/", (req, res) => {
-    return res.send("muie dinu");
+    return res.send("hello world");
 });
 
 const userRoute = require("./routes/user");

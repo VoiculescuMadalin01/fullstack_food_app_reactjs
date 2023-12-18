@@ -4,8 +4,15 @@ import {LoginInput} from "../components";
 import {FaEnvelope, FaLock, FcGoogle} from "../assets/icons";
 import {motion} from "framer-motion";
 import {buttonClick} from "../animations";
+import {useNavigate} from "react-router-dom";
 
-import {getAuth, signInWithPopup, GoogleAuthProvider} from "firebase/auth";
+import {
+    getAuth,
+    signInWithPopup,
+    GoogleAuthProvider,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+} from "firebase/auth";
 import {app} from "../config/firebase.config";
 import {validateUserJWTToken} from "../api";
 
@@ -17,21 +24,86 @@ function Login() {
 
     const firebaseAuth = getAuth(app);
     const provider = new GoogleAuthProvider();
+    const navigate = useNavigate();
+
+    function isValidEmail(email) {
+        return /\S+@\S+\.\S+/.test(email);
+    }
 
     const loginWithGoogle = async () => {
         await signInWithPopup(firebaseAuth, provider)
             .then((userCred) => {
                 firebaseAuth.onAuthStateChanged((cred) => {
-                    cred.getIdToken().then((token) => {
-                        validateUserJWTToken(token).then((data) => {
-                            console.log(data);
+                    if (cred) {
+                        cred.getIdToken().then((token) => {
+                            validateUserJWTToken(token).then((data) => {
+                                console.log(data);
+                            });
+                            navigate("/", {replace: true});
                         });
-                    });
+                    }
                 });
             })
             .catch((err) => {
                 console.log("eroare", err);
             });
+    };
+
+    const signUpWithEmailPassword = async () => {
+        if (userEmail === "" || password === "" || confirm_password === "") {
+            //Alert message
+            alert("one or more fields are empty");
+        } else {
+            if (password === confirm_password && isValidEmail(userEmail)) {
+                await createUserWithEmailAndPassword(
+                    firebaseAuth,
+                    userEmail,
+                    password
+                ).then((userCred) => {
+                    firebaseAuth.onAuthStateChanged((cred) => {
+                        if (cred) {
+                            setUserEmail("");
+                            setPassword("");
+                            setConfirm_password("");
+                            setIsSignUp(false);
+
+                            cred.getIdToken().then((token) => {
+                                validateUserJWTToken(token).then((data) => {
+                                    console.log(data);
+                                });
+                                navigate("/", {replace: true});
+                            });
+                        }
+                    });
+                });
+            } else {
+                //alert message
+                alert("passwords don't match or email invalid");
+            }
+        }
+    };
+
+    const signInWithEmailPass = async () => {
+        if (userEmail !== "" && password !== "" && isValidEmail(userEmail)) {
+            await signInWithEmailAndPassword(
+                firebaseAuth,
+                userEmail,
+                password
+            ).then((userCred) => {
+                firebaseAuth.onAuthStateChanged((cred) => {
+                    if (cred) {
+                        cred.getIdToken().then((token) => {
+                            validateUserJWTToken(token).then((data) => {
+                                console.log(data);
+                            });
+                            navigate("/", {replace: true});
+                        });
+                    }
+                });
+            });
+        } else {
+            alert("email or password invalid");
+        }
     };
 
     return (
@@ -113,6 +185,7 @@ function Login() {
                             </motion.button>{" "}
                         </p>
                     )}
+
                     {/* button section */}
 
                     {isSignUp ? (
@@ -120,6 +193,7 @@ function Login() {
                             {...buttonClick}
                             className="w-full px-4 py-2 rounded-md bg-red-400 cursor-pointer text-white text-xl capitalize hover:bg-red-500
                         transition-all duration-150"
+                            onClick={signUpWithEmailPassword}
                         >
                             Sign up
                         </motion.button>
@@ -128,12 +202,15 @@ function Login() {
                             {...buttonClick}
                             className="w-full px-4 py-2 rounded-md bg-red-400 cursor-pointer text-white text-xl capitalize hover:bg-red-500
                         transition-all duration-150"
+                            onClick={signInWithEmailPass}
                         >
                             Sign in
                         </motion.button>
                     )}
                 </div>
+
                 {/* google login section */}
+
                 <div className="flex items-center justify-between gap-16">
                     <div className="w-24 h-[1px] rounded-md bg-white"></div>
                     <div className="text-white">or</div>
