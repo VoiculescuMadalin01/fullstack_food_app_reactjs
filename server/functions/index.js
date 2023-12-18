@@ -30,4 +30,8 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccountKey),
 });
 
+app.get("/", (req, res) => {
+    return res.send("muie ene");
+});
+
 exports.app = onRequest(app);
