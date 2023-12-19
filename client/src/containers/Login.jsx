@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {LoginBg, Logo} from "../assets";
 import {LoginInput} from "../components";
 import {FaEnvelope, FaLock, FcGoogle} from "../assets/icons";
@@ -15,6 +15,8 @@ import {
 } from "firebase/auth";
 import {app} from "../config/firebase.config";
 import {validateUserJWTToken} from "../api";
+import {useDispatch, useSelector} from "react-redux";
+import {setUserDetails} from "../context/actions/userActions";
 
 function Login() {
     const [userEmail, setUserEmail] = useState("");
@@ -25,6 +27,17 @@ function Login() {
     const firebaseAuth = getAuth(app);
     const provider = new GoogleAuthProvider();
     const navigate = useNavigate();
+
+    const dispatch = useDispatch();
+
+    const user = useSelector((state) => state.user);
+
+    useEffect(() => {
+        console.log(user, "login");
+        if (user) {
+            navigate("/", {replace: true});
+        }
+    }, [user]);
 
     function isValidEmail(email) {
         return /\S+@\S+\.\S+/.test(email);
@@ -37,7 +50,7 @@ function Login() {
                     if (cred) {
                         cred.getIdToken().then((token) => {
                             validateUserJWTToken(token).then((data) => {
-                                console.log(data);
+                                dispatch(setUserDetails(data));
                             });
                             navigate("/", {replace: true});
                         });
@@ -69,7 +82,7 @@ function Login() {
 
                             cred.getIdToken().then((token) => {
                                 validateUserJWTToken(token).then((data) => {
-                                    console.log(data);
+                                    dispatch(setUserDetails(data));
                                 });
                                 navigate("/", {replace: true});
                             });
@@ -94,7 +107,7 @@ function Login() {
                     if (cred) {
                         cred.getIdToken().then((token) => {
                             validateUserJWTToken(token).then((data) => {
-                                console.log(data);
+                                dispatch(setUserDetails(data));
                             });
                             navigate("/", {replace: true});
                         });
