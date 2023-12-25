@@ -63,7 +63,7 @@ function Login() {
                 });
             })
             .catch((err) => {
-                "eroare", err;
+                console.log("eroare", err);
             });
     };
 
