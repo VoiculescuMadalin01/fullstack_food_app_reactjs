@@ -17,7 +17,11 @@ import {app} from "../config/firebase.config";
 import {validateUserJWTToken} from "../api";
 import {useDispatch, useSelector} from "react-redux";
 import {setUserDetails} from "../context/actions/userActions";
-import {alertInfo, alertWarning} from "../context/actions/alertActions";
+import {
+    alertInfo,
+    alertNull,
+    alertWarning,
+} from "../context/actions/alertActions";
 
 function Login() {
     const [userEmail, setUserEmail] = useState("");
@@ -67,6 +71,7 @@ function Login() {
         if (userEmail === "" || password === "" || confirm_password === "") {
             //Alert message
             dispatch(alertInfo("Required fields should not be empty!"));
+            setTimeout(dispatch(alertNull()), 5000);
         } else {
             if (password === confirm_password && isValidEmail(userEmail)) {
                 await createUserWithEmailAndPassword(
@@ -96,6 +101,7 @@ function Login() {
                 dispatch(
                     alertWarning("Passwords don't match or email invalid")
                 );
+                setTimeout(dispatch(alertNull()), 5000);
             }
         }
     };
@@ -120,6 +126,7 @@ function Login() {
             });
         } else {
             dispatch(alertWarning("Email or password is incorect!"));
+            setTimeout(dispatch(alertNull()), 5000);
         }
     };
 

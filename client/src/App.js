@@ -19,6 +19,7 @@ const App = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        setIsLoading(true);
         if (user) {
             setIsLoading(true);
             firebaseAuth.onAuthStateChanged((cred) => {
@@ -33,6 +34,10 @@ const App = () => {
                     setIsLoading(false);
                 }, 1600);
             });
+        } else {
+            setInterval(() => {
+                setIsLoading(false);
+            }, 1600);
         }
     }, []);
 
