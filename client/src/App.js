@@ -20,25 +20,18 @@ const App = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        if (user) {
-            setIsLoading(true);
-            firebaseAuth.onAuthStateChanged((cred) => {
-                if (cred) {
-                    cred.getIdToken().then((token) => {
-                        validateUserJWTToken(token).then((data) => {
-                            dispatch(setUserDetails(data));
-                        });
+        firebaseAuth.onAuthStateChanged((cred) => {
+            if (cred) {
+                cred.getIdToken().then((token) => {
+                    validateUserJWTToken(token).then((data) => {
+                        dispatch(setUserDetails(data));
                     });
-                }
-                setInterval(() => {
-                    setIsLoading(false);
-                }, 1600);
-            });
-        } else {
+                });
+            }
             setInterval(() => {
                 setIsLoading(false);
             }, 1600);
-        }
+        });
     }, []);
 
     return (
