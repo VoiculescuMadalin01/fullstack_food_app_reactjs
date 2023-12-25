@@ -8,12 +8,13 @@ import {validateUserJWTToken} from "./api";
 import {setUserDetails} from "./context/actions/userActions";
 import {motion} from "framer-motion";
 import {fadeInOut} from "./animations";
-import {MainLoader} from "./components";
+import {Alert, MainLoader} from "./components";
 
 const App = () => {
     const firebaseAuth = getAuth(app);
     const [isLoading, setIsLoading] = useState(false);
     const user = useSelector((state) => state.user);
+    const alert = useSelector((state) => state.alert);
 
     const dispatch = useDispatch();
 
@@ -49,6 +50,9 @@ const App = () => {
                 <Route path="/*" element={<Main />} />
                 <Route path="/login" element={<Login />} />
             </Routes>
+            {alert?.type && (
+                <Alert type={alert?.type} message={alert?.message} />
+            )}
         </div>
     );
 };

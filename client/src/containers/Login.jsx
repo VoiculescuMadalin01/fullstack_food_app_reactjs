@@ -17,6 +17,7 @@ import {app} from "../config/firebase.config";
 import {validateUserJWTToken} from "../api";
 import {useDispatch, useSelector} from "react-redux";
 import {setUserDetails} from "../context/actions/userActions";
+import {alertInfo, alertWarning} from "../context/actions/alertActions";
 
 function Login() {
     const [userEmail, setUserEmail] = useState("");
@@ -31,9 +32,9 @@ function Login() {
     const dispatch = useDispatch();
 
     const user = useSelector((state) => state.user);
+    const alert = useSelector((state) => state.alert);
 
     useEffect(() => {
-        console.log(user, "login");
         if (user) {
             navigate("/", {replace: true});
         }
@@ -65,7 +66,7 @@ function Login() {
     const signUpWithEmailPassword = async () => {
         if (userEmail === "" || password === "" || confirm_password === "") {
             //Alert message
-            alert("one or more fields are empty");
+            dispatch(alertInfo("Required fields should not be empty!"));
         } else {
             if (password === confirm_password && isValidEmail(userEmail)) {
                 await createUserWithEmailAndPassword(
@@ -91,7 +92,10 @@ function Login() {
                 });
             } else {
                 //alert message
-                alert("passwords don't match or email invalid");
+                // alert("passwords don't match or email invalid");
+                dispatch(
+                    alertWarning("Passwords don't match or email invalid")
+                );
             }
         }
     };
@@ -115,7 +119,7 @@ function Login() {
                 });
             });
         } else {
-            alert("email or password invalid");
+            dispatch(alertWarning("Email or password is incorect!"));
         }
     };
 
