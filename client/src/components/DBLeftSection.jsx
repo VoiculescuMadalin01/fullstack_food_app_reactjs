@@ -21,7 +21,7 @@ function DBLeftSection() {
                             ? `${isActiveStyles} px-4 py-2 border-l-8 border-red-500`
                             : isNotActiveStyles
                     }
-                    to={"dashboard/home"}
+                    to={"/dashboard/home"}
                 >
                     Home
                 </NavLink>
@@ -31,7 +31,7 @@ function DBLeftSection() {
                             ? `${isActiveStyles} px-4 py-2 border-l-8 border-red-500`
                             : isNotActiveStyles
                     }
-                    to={"dashboard/orders"}
+                    to={"/dashboard/orders"}
                 >
                     Orders
                 </NavLink>
@@ -41,7 +41,7 @@ function DBLeftSection() {
                             ? `${isActiveStyles} px-4 py-2 border-l-8 border-red-500`
                             : isNotActiveStyles
                     }
-                    to={"dashboard/items"}
+                    to={"/dashboard/items"}
                 >
                     Items
                 </NavLink>
@@ -51,7 +51,7 @@ function DBLeftSection() {
                             ? `${isActiveStyles} px-4 py-2 border-l-8 border-red-500`
                             : isNotActiveStyles
                     }
-                    to={"dashboard/newItem"}
+                    to={"/dashboard/newItem"}
                 >
                     Add New item
                 </NavLink>
@@ -61,7 +61,7 @@ function DBLeftSection() {
                             ? `${isActiveStyles} px-4 py-2 border-l-8 border-red-500`
                             : isNotActiveStyles
                     }
-                    to={"dashboard/users"}
+                    to={"/dashboard/users"}
                 >
                     Users
                 </NavLink>
