@@ -31,6 +31,7 @@ function Login() {
 
     const firebaseAuth = getAuth(app);
     const provider = new GoogleAuthProvider();
+
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
