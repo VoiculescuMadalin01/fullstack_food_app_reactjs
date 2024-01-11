@@ -1,8 +1,13 @@
 import React, {useState} from "react";
 import {statuses} from "../utils/style";
 import {Spinner} from "../components";
-import {FaCloudUploadAlt} from "../assets/icons";
-import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
+import {FaCloudUploadAlt, MdDelete} from "../assets/icons";
+import {
+    deleteObject,
+    getDownloadURL,
+    ref,
+    uploadBytesResumable,
+} from "firebase/storage";
 import {storage} from "../config/firebase.config";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -10,6 +15,8 @@ import {
     alertNull,
     alertSuccess,
 } from "../context/actions/alertActions";
+import {motion} from "framer-motion";
+import {buttonClick} from "../animations";
 
 function DBNewItems() {
     const [itemName, setItemName] = useState("");
@@ -29,7 +36,6 @@ function DBNewItems() {
             storage,
             `Images/${Date.now()}_${imageFile.name}`
         );
-        console.log(storageRef);
         const uploadTask = uploadBytesResumable(storageRef, imageFile);
         uploadTask.on(
             "state_changed",
@@ -57,6 +63,19 @@ function DBNewItems() {
                 });
             }
         );
+    };
+
+    const deleteImageFromFirebase = () => {
+        setIsLoading(true);
+        const deleteRef = ref(storage, imageDownloadURL);
+        deleteObject(deleteRef).then(() => {
+            setImageDownloadURL(null);
+            setIsLoading(false);
+            dispatch(alertSuccess("Image deleted from the cloud"));
+            setTimeout(() => {
+                dispatch(alertNull());
+            }, 5000);
+        });
     };
 
     return (
@@ -96,7 +115,32 @@ function DBNewItems() {
                     {isLoading ? (
                         <div className="w-full h-full flex flex-col items-center justify-evenly px-24">
                             <Spinner />
-                            {progress}
+                            {Math.round(progress) > 0 && (
+                                <div className="w-full flex flex-col items-center justify-center gap-2">
+                                    <div className="flex justify-between w-full">
+                                        <span className="text-base font-medium text-textColor">
+                                            Progress
+                                        </span>
+                                        <span className="text-sm font-medium text-textColor">
+                                            {Math.round(progress) > 0 && (
+                                                <>{`${Math.round(
+                                                    progress
+                                                )}%`}</>
+                                            )}
+                                        </span>
+                                    </div>
+                                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div
+                                            className="bg-red-600 h-2.5 rounded-full transition-all duration-300 ease-in-out"
+                                            style={{
+                                                width: `${Math.round(
+                                                    progress
+                                                )}%`,
+                                            }}
+                                        ></div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <>
@@ -123,7 +167,28 @@ function DBNewItems() {
                                     </label>
                                 </>
                             ) : (
-                                <></>
+                                <>
+                                    <div className="relative h-full w-full overflow-hidden rounded-md">
+                                        <motion.img
+                                            whileHover={{scale: 1.15}}
+                                            src={imageDownloadURL}
+                                            className="w-full h-full object-contain"
+                                        />
+
+                                        <motion.button
+                                            {...buttonClick}
+                                            type="button"
+                                            className="absolute top-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md duration-500 transition-all ease-in-out"
+                                            onClick={() =>
+                                                deleteImageFromFirebase(
+                                                    imageDownloadURL
+                                                )
+                                            }
+                                        >
+                                            <MdDelete className="rotate-0" />
+                                        </motion.button>
+                                    </div>
+                                </>
                             )}
                         </>
                     )}
