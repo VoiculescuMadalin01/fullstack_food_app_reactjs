@@ -52,7 +52,6 @@ function DBNewItems() {
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    console.log("File available at", downloadURL);
                     setImageDownloadURL(downloadURL);
                     setIsLoading(false);
                     setProgress(null);
@@ -78,6 +77,15 @@ function DBNewItems() {
         });
     };
 
+    const submitNewData = () => {
+        const data = {
+            product_name: itemName,
+            product_category: category,
+            product_price: price,
+            imageURL: imageDownloadURL,
+        };
+        console.log(data);
+    };
     return (
         <div className="flex items-center justify-center flex-col pt-6 px-24 w-full">
             <div className="border border-gray-300 rounded-e-md p-4 w-full flex flex-col items-center gap-4">
@@ -193,6 +201,13 @@ function DBNewItems() {
                         </>
                     )}
                 </div>
+                <motion.button
+                    {...buttonClick}
+                    onClick={submitNewData}
+                    className="w-9/12 py-2 rounded-md bg-red-400 text-primary hover:bg-red-500 cursor-pointer"
+                >
+                    Save
+                </motion.button>
             </div>
         </div>
     );
