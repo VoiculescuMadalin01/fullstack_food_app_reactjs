@@ -24,7 +24,16 @@ export const addNewProduct = async (data) => {
         });
         return res.data.data;
     } catch (err) {
-        console.log("axios ", err);
+        return null;
+    }
+};
+
+export const getAllProduct = async (data) => {
+    console.log(data);
+    try {
+        const res = await axios.get(`${baseUrl}/api/products/all`);
+        return res.data.data;
+    } catch (err) {
         return null;
     }
 };

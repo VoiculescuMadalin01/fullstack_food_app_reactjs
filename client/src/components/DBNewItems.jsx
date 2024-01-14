@@ -17,7 +17,8 @@ import {
 } from "../context/actions/alertActions";
 import {motion} from "framer-motion";
 import {buttonClick} from "../animations";
-import {addNewProduct} from "../api";
+import {addNewProduct, getAllProduct} from "../api";
+import {setAllProducts} from "../context/actions/productActions";
 
 function DBNewItems() {
     const [itemName, setItemName] = useState("");
@@ -95,6 +96,9 @@ function DBNewItems() {
             setItemName("");
             setPrice("");
             setCategory(null);
+        });
+        getAllProduct().then((data) => {
+            dispatch(setAllProducts(data));
         });
     };
     return (
