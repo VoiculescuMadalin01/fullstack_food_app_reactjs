@@ -15,3 +15,16 @@ export const validateUserJWTToken = async (token) => {
         return null;
     }
 };
+
+export const addNewProduct = async (data) => {
+    console.log(data);
+    try {
+        const res = await axios.post(`${baseUrl}/api/products/create`, {
+            ...data,
+        });
+        return res.data.data;
+    } catch (err) {
+        console.log("axios ", err);
+        return null;
+    }
+};

@@ -17,6 +17,7 @@ import {
 } from "../context/actions/alertActions";
 import {motion} from "framer-motion";
 import {buttonClick} from "../animations";
+import {addNewProduct} from "../api";
 
 function DBNewItems() {
     const [itemName, setItemName] = useState("");
@@ -84,7 +85,17 @@ function DBNewItems() {
             product_price: price,
             imageURL: imageDownloadURL,
         };
-        console.log(data);
+        addNewProduct(data).then((res) => {
+            console.log(res);
+            dispatch(alertSuccess("New Item added"));
+            setTimeout(() => {
+                dispatch(alertNull());
+            }, 5000);
+            setImageDownloadURL(null);
+            setItemName("");
+            setPrice("");
+            setCategory(null);
+        });
     };
     return (
         <div className="flex items-center justify-center flex-col pt-6 px-24 w-full">
