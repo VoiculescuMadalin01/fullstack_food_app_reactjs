@@ -42,4 +42,19 @@ router.get("/all", async (req, res) => {
     })();
 });
 
+router.delete("/delete/:productId", async (req, res) => {
+    const productId = req.params.productId;
+    try {
+        await db
+            .collection("products")
+            .doc(`/${productId}/`)
+            .delete()
+            .then((result) => {
+                return res.status(200).send({success: true, data: result});
+            });
+    } catch (err) {
+        return res.send({success: false, msg: `Error:${err}`});
+    }
+});
+
 module.exports = router;

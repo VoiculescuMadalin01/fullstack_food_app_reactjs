@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {DataTable} from "../components";
 import {HiCurrencyDollar} from "../assets/icons";
 import {useDispatch, useSelector} from "react-redux";
-import {getAllProduct} from "../api";
+import {deleteProduct, getAllProduct} from "../api";
 import {setAllProducts} from "../context/actions/productActions";
 
 function DBItems() {
@@ -68,9 +68,19 @@ function DBItems() {
                             icon: "delete",
                             tooltip: "Delete Data",
                             onClick: (event, rowData) => {
-                                alert(
-                                    "You want to delete " + rowData.productId
-                                );
+                                if (
+                                    window.confirm(
+                                        "Are you sure,you want to delete this product?"
+                                    )
+                                ) {
+                                    deleteProduct(rowData.productId).then(
+                                        (res) => {
+                                            getAllProduct().then((data) => {
+                                                dispatch(setAllProducts(data));
+                                            });
+                                        }
+                                    );
+                                }
                             },
                         },
                     ]}
