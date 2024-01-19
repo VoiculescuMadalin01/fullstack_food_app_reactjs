@@ -86,20 +86,22 @@ function DBNewItems() {
             product_price: price,
             imageURL: imageDownloadURL,
         };
-        addNewProduct(data).then((res) => {
-            console.log(res);
-            dispatch(alertSuccess("New Item added"));
-            setTimeout(() => {
-                dispatch(alertNull());
-            }, 5000);
-            setImageDownloadURL(null);
-            setItemName("");
-            setPrice("");
-            setCategory(null);
-        });
-        getAllProduct().then((data) => {
-            dispatch(setAllProducts(data));
-        });
+        addNewProduct(data)
+            .then((res) => {
+                dispatch(alertSuccess("New Item added"));
+                setTimeout(() => {
+                    dispatch(alertNull());
+                }, 5000);
+                setImageDownloadURL(null);
+                setItemName("");
+                setPrice("");
+                setCategory(null);
+            })
+            .then(() => {
+                getAllProduct().then((data) => {
+                    dispatch(setAllProducts(data));
+                });
+            });
     };
     return (
         <div className="flex items-center justify-center flex-col pt-6 px-24 w-full">

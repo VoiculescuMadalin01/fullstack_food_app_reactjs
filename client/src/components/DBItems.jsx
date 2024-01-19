@@ -4,6 +4,7 @@ import {HiCurrencyDollar} from "../assets/icons";
 import {useDispatch, useSelector} from "react-redux";
 import {deleteProduct, getAllProduct} from "../api";
 import {setAllProducts} from "../context/actions/productActions";
+import {alertNull, alertSuccess} from "../context/actions/alertActions";
 
 function DBItems() {
     const products = useSelector((state) => state.products);
@@ -75,6 +76,12 @@ function DBItems() {
                                 ) {
                                     deleteProduct(rowData.productId).then(
                                         (res) => {
+                                            dispatch(
+                                                alertSuccess("Product Deleted")
+                                            );
+                                            setTimeout(() => {
+                                                dispatch(alertNull());
+                                            }, 2000);
                                             getAllProduct().then((data) => {
                                                 dispatch(setAllProducts(data));
                                             });
