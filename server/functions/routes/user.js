@@ -32,8 +32,8 @@ const listAllUsers = async (nextpagetoken) => {
         .auth()
         .listUsers(1000, nextpagetoken)
         .then((listuserresult) => {
-            listuserresult.users.forEach((rec) => {
-                data.push(rec);
+            listuserresult.users.forEach((userRecord) => {
+                data.push(userRecord.toJSON());
             });
             if (listuserresult.pageToken) {
                 listAllUsers(listuserresult.pageToken);
@@ -43,10 +43,9 @@ const listAllUsers = async (nextpagetoken) => {
             console.log(err);
         });
 };
-listAllUsers();
+await listAllUsers();
 
 router.get("/all", async (req, res) => {
-    listAllUsers();
     try {
         return res
             .status(200)
