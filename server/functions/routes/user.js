@@ -27,7 +27,7 @@ router.get("/jwtVerification", async (req, res) => {
     }
 });
 
-const listAllUsers = async (nextpagetoken) => {
+const listAllUsers = (nextpagetoken) => {
     admin
         .auth()
         .listUsers(1000, nextpagetoken)
@@ -43,7 +43,7 @@ const listAllUsers = async (nextpagetoken) => {
             console.log(err);
         });
 };
-await listAllUsers();
+listAllUsers();
 
 router.get("/all", async (req, res) => {
     try {
