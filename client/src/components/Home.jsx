@@ -1,7 +1,8 @@
 import {motion} from "framer-motion";
 import React from "react";
 import {Delivery, HeroBg} from "../assets";
-import {buttonClick} from "../animations";
+import {buttonClick, staggerFadeInOut} from "../animations";
+import {randomData} from "../utils/style";
 
 function Home() {
     return (
@@ -42,6 +43,34 @@ function Home() {
                     alt="hero"
                     className="absolute top-0 right-0 md:-right-12 w-full h-420 md:w-auto md:h-650"
                 />
+                <div className="w-full md:w-460 ml-0 flex flex-wrap items-center justify-center gap-4 gap-y-14">
+                    {randomData &&
+                        randomData.map((data, i) => (
+                            <motion.div
+                                key={data.productId}
+                                {...staggerFadeInOut(i)}
+                                className="w-32 h-36 md:h-auto md:w-190 p-4 bg-lightOverlay backdrop-blur-md rounded-3xl flex items-center flex-col justify-center drop-shadow-lg"
+                            >
+                                <img
+                                    src={data.imageURL}
+                                    alt="product image"
+                                    className="w-12 h-12 md:w-32 md:h-32 md:-mt-16 object-contain"
+                                />
+                                <p className="text-sm lg:text-xl font-semibold text-textColor">
+                                    {data.product_name.slice(0, 14)}
+                                </p>
+                                <p className="text-[12px] text-center md:text-base text-lighttextGray font-semibold capitalize">
+                                    {data.product_category}
+                                </p>
+                                <p className="text-sm font-semibold text-headingColor ">
+                                    <span className="text-xs text-red-600">
+                                        $
+                                    </span>{" "}
+                                    {data.product_price}
+                                </p>
+                            </motion.div>
+                        ))}
+                </div>
             </div>
         </motion.div>
     );
