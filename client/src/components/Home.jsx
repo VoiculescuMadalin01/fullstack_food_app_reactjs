@@ -1,10 +1,33 @@
 import {motion} from "framer-motion";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Delivery, HeroBg} from "../assets";
 import {buttonClick, staggerFadeInOut} from "../animations";
 import {randomData} from "../utils/style";
+import {useSelector} from "react-redux";
 
 function Home() {
+    const products = useSelector((state) => state.products);
+    const [heroProducts, setHeroProducts] = useState(null);
+    useEffect(() => {
+        if (products) {
+            setHeroProducts(getRandomProducts(products, 6));
+        }
+    }, [products]);
+
+    const getRandomProducts = (array, count) => {
+        // Check if the count is greater than the array length
+        if (count > array.length && array) {
+            console.error("Count cannot be greater than the array length");
+            return [];
+        }
+
+        const shuffledArray = array.slice().sort(() => Math.random() - 0.5);
+
+        const randomElements = shuffledArray.slice(0, count);
+
+        return randomElements;
+    };
+
     return (
         <motion.div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex flex-col justify-start items-start gap-6">
@@ -44,20 +67,20 @@ function Home() {
                     className="absolute top-0 right-0 md:-right-12 w-full h-420 md:w-auto md:h-650"
                 />
                 <div className="w-full md:w-460 ml-0 flex flex-wrap items-center justify-center gap-4 gap-y-14">
-                    {randomData &&
-                        randomData.map((data, i) => (
+                    {heroProducts &&
+                        heroProducts?.map((data, i) => (
                             <motion.div
                                 key={data.productId}
                                 {...staggerFadeInOut(i)}
-                                className="w-32 h-36 md:h-auto md:w-190 p-4 bg-lightOverlay backdrop-blur-md rounded-3xl flex items-center flex-col justify-center drop-shadow-lg"
+                                className="w-32 h-36 min-h-[200px] md:h-auto md:w-190 p-4 bg-lightOverlay backdrop-blur-md rounded-3xl flex items-center flex-col justify-center drop-shadow-lg"
                             >
                                 <img
                                     src={data.imageURL}
                                     alt="product image"
                                     className="w-12 h-12 md:w-32 md:h-32 md:-mt-16 object-contain"
                                 />
-                                <p className="text-sm lg:text-xl font-semibold text-textColor">
-                                    {data.product_name.slice(0, 14)}
+                                <p className="text-sm lg:text-xl font-semibold text-textColor text-center">
+                                    {data.product_name}
                                 </p>
                                 <p className="text-[12px] text-center md:text-base text-lighttextGray font-semibold capitalize">
                                     {data.product_category}
@@ -66,7 +89,7 @@ function Home() {
                                     <span className="text-xs text-red-600">
                                         $
                                     </span>{" "}
-                                    {data.product_price}
+                                    {Number(data.product_price).toFixed(2)}
                                 </p>
                             </motion.div>
                         ))}
