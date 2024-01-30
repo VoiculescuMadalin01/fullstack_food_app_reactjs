@@ -55,3 +55,16 @@ export const getAllUsers = async () => {
         return null;
     }
 };
+
+//add product to cart
+export const addNewItemToCart = async (user_id, data) => {
+    try {
+        const res = await axios.post(
+            `${baseUrl}/api/products/addToCart/${user_id}`,
+            {...data}
+        );
+        return res.data.data;
+    } catch (error) {
+        return error;
+    }
+};
