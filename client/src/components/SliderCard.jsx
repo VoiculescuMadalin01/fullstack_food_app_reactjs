@@ -1,11 +1,12 @@
 import React from "react";
 import {HiCurrencyDollar} from "react-icons/hi2";
-import {motion} from "framer-motion";
+import {distance, motion} from "framer-motion";
 import {buttonClick} from "../animations";
 import {IoBasket} from "react-icons/io5";
 import {useDispatch, useSelector} from "react-redux";
-import {addNewItemToCart} from "../api";
+import {addNewItemToCart, getAllCartItems} from "../api";
 import {alertNull, alertSuccess} from "../context/actions/alertActions";
+import {setCartItems} from "../context/actions/cartActions";
 
 function SliderCard({data}) {
     const user = useSelector((state) => state.user);
@@ -13,8 +14,10 @@ function SliderCard({data}) {
 
     const sendToCart = () => {
         addNewItemToCart(user?.user_id, data).then((res) => {
-            console.log(res);
             dispatch(alertSuccess("Added to cart"));
+            getAllCartItems(user?.user_id).then((items) => {
+                dispatch(setCartItems(items));
+            });
             setTimeout(() => {
                 dispatch(alertNull());
             }, 3000);

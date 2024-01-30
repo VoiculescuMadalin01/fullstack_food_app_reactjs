@@ -65,6 +65,16 @@ export const addNewItemToCart = async (user_id, data) => {
         );
         return res.data.data;
     } catch (error) {
-        return error;
+        return null;
+    }
+};
+export const getAllCartItems = async (user_id) => {
+    try {
+        const res = await axios.get(
+            `${baseUrl}/api/products/getCartItems/${user_id}`
+        );
+        return res.data.data;
+    } catch (error) {
+        return null;
     }
 };
