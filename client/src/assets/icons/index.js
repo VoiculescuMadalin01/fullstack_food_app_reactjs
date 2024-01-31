@@ -13,7 +13,7 @@ import {
     BsExclamationTriangleFill,
 } from "react-icons/bs";
 import {IoFastFood, IoBasket} from "react-icons/io5";
-import {BiChevronRight} from "react-icons/bi";
+import {BiChevronsRight} from "react-icons/bi";
 import {HiCurrencyDollar} from "react-icons/hi2";
 
 export {
@@ -31,7 +31,7 @@ export {
     FaCheck,
     BsExclamationTriangleFill,
     IoBasket,
-    BiChevronRight,
+    BiChevronsRight,
     FcClearFilters,
     FaArrowLeft,
     HiCurrencyDollar,
