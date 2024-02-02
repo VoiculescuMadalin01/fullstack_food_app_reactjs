@@ -8,6 +8,8 @@ import {
     FcClearFilters,
     HiCurrencyDollar,
 } from "../assets/icons";
+import {getAllCartItems, increaseItemQuantity} from "../api";
+import {setCartItems} from "../context/actions/cartActions";
 const Cart = () => {
     const dispatch = useDispatch();
     const cart = useSelector((state) => state.cart);
@@ -81,6 +83,9 @@ const Cart = () => {
 
 export const CartItemCard = ({index, data}) => {
     const cart = useSelector((state) => state.cart);
+    const user = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+
     const [itemTotal, setItemTotal] = useState(0);
 
     useEffect(() => {
@@ -88,10 +93,22 @@ export const CartItemCard = ({index, data}) => {
     }, [itemTotal, cart]);
 
     const decrementCart = (productId) => {
-        console.log("d", productId);
+        increaseItemQuantity(user?.user_id, productId, "decrement").then(
+            (data) => {
+                getAllCartItems(user?.user_id).then((items) => {
+                    dispatch(setCartItems(items));
+                });
+            }
+        );
     };
     const incrementCart = (productId) => {
-        console.log("i", productId);
+        increaseItemQuantity(user?.user_id, productId, "increment").then(
+            (data) => {
+                getAllCartItems(user?.user_id).then((items) => {
+                    dispatch(setCartItems(items));
+                });
+            }
+        );
     };
 
     return (
