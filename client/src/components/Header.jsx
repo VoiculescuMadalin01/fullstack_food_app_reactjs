@@ -14,7 +14,6 @@ import {setCartOn} from "../context/actions/displayCartAction";
 function Header() {
     const user = useSelector((state) => state.user);
     const cart = useSelector((state) => state.cart);
-    const isCart = useSelector((state) => state.isCart);
 
     const [isMenu, setIsMenu] = useState(false);
     const firebaseAuth = getAuth(app);
@@ -110,12 +109,16 @@ function Header() {
                                     {...slideTop}
                                     onMouseLeave={() => setIsMenu(false)}
                                 >
-                                    <Link
-                                        className="hover:text-red-500 text-xl to-textColor"
-                                        to={"/dashboard/home"}
-                                    >
-                                        Dashboard
-                                    </Link>
+                                    {user?.user_id ===
+                                        process.env.REACT_APP_ADMIN_ID && (
+                                        <Link
+                                            className="hover:text-red-500 text-xl to-textColor"
+                                            to={"/dashboard/home"}
+                                        >
+                                            Dashboard
+                                        </Link>
+                                    )}
+
                                     <Link
                                         className="hover:text-red-500 text-xl to-textColor"
                                         to={"/profile"}

@@ -1,6 +1,6 @@
 import React from "react";
 import {HiCurrencyDollar} from "react-icons/hi2";
-import {distance, motion} from "framer-motion";
+import {motion} from "framer-motion";
 import {buttonClick} from "../animations";
 import {IoBasket} from "react-icons/io5";
 import {useDispatch, useSelector} from "react-redux";

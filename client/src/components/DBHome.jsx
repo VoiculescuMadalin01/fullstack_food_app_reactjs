@@ -1,11 +1,15 @@
 import React, {useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {getAllProduct} from "../api";
+import {getAllProduct, getAllOrders} from "../api";
 import {setAllProducts} from "../context/actions/productActions";
+import {setOrders} from "../context/actions/ordersAction";
+
 import {CChart} from "@coreui/react-chartjs";
 
 function DBHome() {
     const products = useSelector((state) => state.products);
+    const orders = useSelector((state) => state.orders);
+
     const dispatch = useDispatch();
 
     const drinks = products?.filter(
@@ -23,11 +27,25 @@ function DBHome() {
         (item) => item.product_category === "chinese"
     );
     const bread = products?.filter((item) => item.product_category === "bread");
+    const ordersPreparing = orders?.filter(
+        (order) => order?.sts === "preparing"
+    );
+    const ordersCancelled = orders?.filter(
+        (order) => order?.sts === "cancelled"
+    );
+    const ordersDelivered = orders?.filter(
+        (order) => order?.sts === "delivered"
+    );
 
     useEffect(() => {
         if (!products) {
             getAllProduct().then((data) => {
                 dispatch(setAllProducts(data));
+            });
+        }
+        if (!orders) {
+            getAllOrders().then((data) => {
+                dispatch(setOrders(data));
             });
         }
     }, []);
@@ -74,23 +92,19 @@ function DBHome() {
                         <CChart
                             type="doughnut"
                             data={{
-                                labels: [
-                                    "Orders",
-                                    "Delivered",
-                                    "Cancelled",
-                                    "Paid",
-                                    "Not Paid",
-                                ],
+                                labels: ["Preparing", "Delivered", "Cancelled"],
                                 datasets: [
                                     {
                                         backgroundColor: [
-                                            "#51ff00",
-                                            "#00b6ff",
-                                            "008bff",
-                                            "#ffd100",
-                                            "#ff00fb",
+                                            "rgb(249 115 22)	",
+                                            "rgb(16 185 129)",
+                                            " rgb(239 68 68)",
                                         ],
-                                        data: [40, 20, 80, 10, 55],
+                                        data: [
+                                            ordersPreparing.length,
+                                            ordersDelivered.length,
+                                            ordersCancelled.length,
+                                        ],
                                     },
                                 ],
                             }}

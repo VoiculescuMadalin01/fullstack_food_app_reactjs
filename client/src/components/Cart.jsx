@@ -8,11 +8,18 @@ import {
     FcClearFilters,
     HiCurrencyDollar,
 } from "../assets/icons";
-import {getAllCartItems, increaseItemQuantity} from "../api";
-import {setCartItems} from "../context/actions/cartActions";
+import {
+    baseUrl,
+    getAllCartItems,
+    increaseItemQuantity,
+    removeAllCartItems,
+} from "../api";
+import {clearCartItems, setCartItems} from "../context/actions/cartActions";
+import axios from "axios";
 const Cart = () => {
     const dispatch = useDispatch();
     const cart = useSelector((state) => state.cart);
+    const user = useSelector((state) => state.user);
     const [total, setTotal] = useState(0);
 
     useEffect(() => {
@@ -25,12 +32,35 @@ const Cart = () => {
         }
     }, [cart]);
 
+    const handleCheckout = () => {
+        const data = {
+            user: user,
+            cart: cart,
+            total: total,
+        };
+        axios
+            .post(`${baseUrl}/api/products/create-checkout-session`, {data})
+            .then((res) => {
+                if (res.data.url) {
+                    window.location.href = res.data.url;
+                }
+            })
+            .catch((err) => console.log(err));
+    };
+
+    const clearCart = () => {
+        if (cart.length > 0) {
+            removeAllCartItems(user?.user_id).then((data) => {
+                dispatch(clearCartItems());
+            });
+        }
+    };
     return (
         <motion.div
             {...slideIn}
             className="fixed top-0 z-50 right-0 w-300 md:w-508 bg-lightOverlay backdrop-blur-md shadow-md h-screen"
         >
-            <div className="w-full flex items-center justify-between py-4 pb-12 px-6">
+            <div className="w-full flex items-center justify-between py-4  px-6">
                 <motion.i
                     {...buttonClick}
                     className="cursor-pointer"
@@ -41,7 +71,11 @@ const Cart = () => {
                 <p className="text-2xl text-headingColor font-semibold">
                     Your Cart
                 </p>
-                <motion.i {...buttonClick} className="cursor-pointer">
+                <motion.i
+                    {...buttonClick}
+                    className="cursor-pointer"
+                    onClick={() => clearCart()}
+                >
                     <FcClearFilters className="text-[30px] text-textColor" />
                 </motion.i>
             </div>
@@ -57,7 +91,7 @@ const Cart = () => {
                                 />
                             ))}
                         </div>
-                        <div className="bg-zinc-800 rounded-t-[60px] w-full h-[35%] flex flex-col items-center justify-center px-4 py-6 gap-24">
+                        <div className="bg-zinc-800 rounded-t-[60px] w-full h-[35%] flex flex-col items-center justify-center px-4 py-6 gap-3">
                             <div className="w-full flex items-center justify-evenly">
                                 <p className=" text-3xl text-zinc-500 font-semibold">
                                     Total
@@ -67,6 +101,13 @@ const Cart = () => {
                                     {total}
                                 </p>
                             </div>
+                            <motion.button
+                                {...buttonClick}
+                                className=" bg-orange-400 w-[70]% px-4 py-3 text-xl text-headingColor font-semibold hover:bg-orange-500 drop-shadow-md rounded-2xl"
+                                onClick={handleCheckout}
+                            >
+                                Check out
+                            </motion.button>
                         </div>
                     </>
                 ) : (
@@ -96,6 +137,7 @@ export const CartItemCard = ({index, data}) => {
         increaseItemQuantity(user?.user_id, productId, "decrement").then(
             (data) => {
                 getAllCartItems(user?.user_id).then((items) => {
+                    console.log(items);
                     dispatch(setCartItems(items));
                 });
             }
@@ -117,7 +159,7 @@ export const CartItemCard = ({index, data}) => {
             className="w-full flex items-center justify-start bg-zinc-800 rounded-md drop-shadow-md px-4 gap-4"
         >
             <img
-                src={data?.imageURL}
+                src={data?.imageShortURL}
                 alt="item image"
                 className="w-24 min-w-[94px] h-24 object-contain"
             />

@@ -2,7 +2,6 @@ import {motion} from "framer-motion";
 import React, {useEffect, useState} from "react";
 import {Delivery, HeroBg} from "../assets";
 import {buttonClick, staggerFadeInOut} from "../animations";
-import {randomData} from "../utils/style";
 import {useSelector} from "react-redux";
 
 function Home() {
