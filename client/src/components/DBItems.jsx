@@ -57,15 +57,6 @@ function DBItems() {
                     title="Product list!"
                     actions={[
                         {
-                            icon: "edit",
-                            tooltip: "Edit Data",
-                            onClick: (event, rowData) => {
-                                alert(
-                                    "You want to update " + rowData.productId
-                                );
-                            },
-                        },
-                        {
                             icon: "delete",
                             tooltip: "Delete Data",
                             onClick: (event, rowData) => {
