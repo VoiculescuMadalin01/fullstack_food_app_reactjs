@@ -101,9 +101,9 @@ function DBHome() {
                                             " rgb(239 68 68)",
                                         ],
                                         data: [
-                                            ordersPreparing.length,
-                                            ordersDelivered.length,
-                                            ordersCancelled.length,
+                                            ordersPreparing?.length,
+                                            ordersDelivered?.length,
+                                            ordersCancelled?.length,
                                         ],
                                     },
                                 ],
