@@ -12,7 +12,7 @@ function OrdersData({index, data, admin}) {
     const handleClick = (orderId, sts) => {
         updateOrderSts(orderId, sts).then(() => {
             getAllOrders().then((data) => {
-                dispatch(setOrders(data));
+                dispatch(setOrders(data.reverse()));
             });
         });
     };

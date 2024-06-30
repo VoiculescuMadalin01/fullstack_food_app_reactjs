@@ -10,11 +10,9 @@ function DBUsers() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!allUsers) {
-            getAllUsers().then((data) => {
-                dispatch(setAllUserDetails(data));
-            });
-        }
+        getAllUsers().then((data) => {
+            dispatch(setAllUserDetails(data));
+        });
     }, []);
 
     return (

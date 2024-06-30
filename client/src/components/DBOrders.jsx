@@ -10,7 +10,7 @@ function DBOrders() {
     useEffect(() => {
         if (!orders) {
             getAllOrders().then((data) => {
-                dispatch(setOrders(data));
+                dispatch(setOrders(data.reverse()));
             });
         }
     }, []);

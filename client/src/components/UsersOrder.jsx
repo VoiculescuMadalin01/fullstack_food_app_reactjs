@@ -17,7 +17,7 @@ function UsersOrder() {
     useEffect(() => {
         if (!orders) {
             getAllOrders().then((data) => {
-                dispatch(setOrders(data));
+                dispatch(setOrders(data.reverse()));
                 setUserOrders(
                     orders?.filter((order) => order?.userId === user?.user_id)
                 );
@@ -28,6 +28,20 @@ function UsersOrder() {
             );
         }
     }, [orders]);
+    useEffect(() => {
+        if (!orders) {
+            getAllOrders().then((data) => {
+                dispatch(setOrders(data.reverse()));
+                setUserOrders(
+                    orders?.filter((order) => order?.userId === user?.user_id)
+                );
+            });
+        } else {
+            setUserOrders(
+                orders?.filter((order) => order?.userId === user?.user_id)
+            );
+        }
+    }, []);
 
     return (
         <main className="w-screen min-h-screen flex items-center justify-start flex-col bg-primary">

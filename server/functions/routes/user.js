@@ -43,7 +43,10 @@ const listAllUsers = (nextpagetoken) => {
             console.log(err);
         });
 };
-listAllUsers();
+setInterval(() => {
+    data = [];
+    listAllUsers();
+}, 5000);
 
 router.get("/all", async (req, res) => {
     try {

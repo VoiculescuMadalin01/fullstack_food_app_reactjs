@@ -1,14 +1,16 @@
 import React, {useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {getAllProduct, getAllOrders} from "../api";
+import {getAllProduct, getAllOrders, getAllUsers} from "../api";
 import {setAllProducts} from "../context/actions/productActions";
 import {setOrders} from "../context/actions/ordersAction";
 
 import {CChart} from "@coreui/react-chartjs";
+import {setAllUserDetails} from "../context/actions/allUsersAction";
 
 function DBHome() {
     const products = useSelector((state) => state.products);
     const orders = useSelector((state) => state.orders);
+    const allUsers = useSelector((state) => state.allUsers);
 
     const dispatch = useDispatch();
 
@@ -45,7 +47,12 @@ function DBHome() {
         }
         if (!orders) {
             getAllOrders().then((data) => {
-                dispatch(setOrders(data));
+                dispatch(setOrders(data.reverse()));
+            });
+        }
+        if (!allUsers) {
+            getAllUsers().then((data) => {
+                dispatch(setAllUserDetails(data));
             });
         }
     }, []);
