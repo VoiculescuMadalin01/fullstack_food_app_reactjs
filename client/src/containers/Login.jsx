@@ -112,22 +112,29 @@ function Login() {
 
     const signInWithEmailPass = async () => {
         if (userEmail !== "" && password !== "" && isValidEmail(userEmail)) {
-            await signInWithEmailAndPassword(
-                firebaseAuth,
-                userEmail,
-                password
-            ).then((userCred) => {
-                firebaseAuth.onAuthStateChanged((cred) => {
-                    if (cred) {
-                        cred.getIdToken().then((token) => {
-                            validateUserJWTToken(token).then((data) => {
-                                dispatch(setUserDetails(data));
+            try {
+                await signInWithEmailAndPassword(
+                    firebaseAuth,
+                    userEmail,
+                    password
+                ).then((userCred) => {
+                    firebaseAuth.onAuthStateChanged((cred) => {
+                        if (cred) {
+                            cred.getIdToken().then((token) => {
+                                validateUserJWTToken(token).then((data) => {
+                                    dispatch(setUserDetails(data));
+                                });
+                                navigate("/", {replace: true});
                             });
-                            navigate("/", {replace: true});
-                        });
-                    }
+                        }
+                    });
                 });
-            });
+            } catch (error) {
+                dispatch(alertWarning("Email or password is incorect!"));
+                setTimeout(() => {
+                    dispatch(alertNull());
+                }, 5000);
+            }
         } else {
             dispatch(alertWarning("Email or password is incorect!"));
             setTimeout(() => {
